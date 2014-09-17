@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+//import org.junit.Test;
+
 public class textBuddy {
 	private static ArrayList<String> list = new ArrayList<String>();
 	private static Scanner sc;
@@ -31,27 +33,30 @@ public class textBuddy {
 		}
 	}
 
-	private static void processCommand(String command) throws IOException {
+	public static String processCommand(String command) throws IOException {
 		// TODO Auto-generated method stub
+		String result=null;
 		switch (command) {
 		case "add":
-			addToFile();
-			break;
+			result = addToFile();
+			return result;
 		case "delete":
 			deleteFileContent();
 			break;
 		case "display":
-			displayFileContent();
-			break;
+			result = displayFileContent();
+			return result;
 		case "clear":
 			clearFileContent();
 			break;
 		case "exit":
 			break;
 		default:
-			System.out.println("Invalid Command!");
-			break;
+			result = "Invalid Command!";
+			System.out.println(result);
+			return result;
 		}
+		return result;
 
 	}
 
@@ -62,13 +67,17 @@ public class textBuddy {
 		System.out.println("all content deleted from " + fileName + "");
 	}
 
-	private static void displayFileContent() throws IOException {
+	public static String displayFileContent() throws IOException {
 		// TODO Auto-generated method stub
+		String result;
 		if (list.isEmpty()) {
-			System.out.println(fileName + " is empty");
+			result= fileName + " is empty";
+			System.out.println(result);
 		} else {
 			printFile(fileName);
+			result = fileName + "is not empty";
 		}
+		return result;
 	}
 
 	private static void printFile(String filename2) throws IOException {
@@ -104,21 +113,23 @@ public class textBuddy {
 
 	//This method will append and display the user input to the file
 	//Pre-condition: will only accept String input
-	private static void addToFile() throws IOException {
+	public static String addToFile() throws IOException {
 		// TODO Auto-generated method stub
 		String data = new String();
 		data = sc.nextLine();
 		list.add(data);
-		System.out.println("added to " + fileName + ": \""
-				+ data.substring(1, data.length()) + "\"");
+		String result = "added to " + fileName + ": \""
+				+ data.substring(1, data.length()) + "\"";
+		System.out.println(result);
 		// first we clear the content of the file
 		clearFile(fileName);
 		// then we append the new content to the file
 		appendFile(list);
+		return result;
 	}
 	
 	//This method will append the user input to the file
-	private static void appendFile(ArrayList<String> list2)
+	public static void appendFile(ArrayList<String> list2)
 			throws IOException {
 		// TODO Auto-generated method stub
 		try {
@@ -128,7 +139,7 @@ public class textBuddy {
 				taskToBeAppended = (i + 1) + "." + list.get(i);
 				bw.write(taskToBeAppended + "\n");
 			}
-
+			
 		} catch (IOException ee) {
 			ee.printStackTrace();
 		} finally {
@@ -139,17 +150,21 @@ public class textBuddy {
 	}
 
 	//This method will delete all content(s) of the file
-	private static void clearFile(String filename2) throws IOException {
+	public static String clearFile(String filename2) throws IOException {
 		// TODO Auto-generated method stub
+		String result = null;
 		try {
 			File file = new File(filename2);
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("");
 			bw.close();
+			result = fileName+" is cleared!";
+			
 		} catch (IOException ee) {
 			ee.printStackTrace();
 		}
+		return result;
 
 	}
 
@@ -167,5 +182,8 @@ public class textBuddy {
 		System.out.println("Welcome to TextBuddy. " + fileName
 				+ " is ready for use");
 	}
+	
+	
+	
 
 }
