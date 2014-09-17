@@ -75,10 +75,10 @@ public class textBuddy {
 		// TODO Auto-generated method stub
 		BufferedReader br = null;
 		try {
-			String curr;
+			String currLine;
 			br = new BufferedReader(new FileReader(fileName));
-			while ((curr = br.readLine()) != null) {
-				System.out.println(curr);
+			while ((currLine = br.readLine()) != null) {
+				System.out.println(currLine);
 			}
 		} catch (IOException ee) {
 			ee.printStackTrace();
@@ -124,9 +124,9 @@ public class textBuddy {
 		try {
 			bw = new BufferedWriter(new FileWriter(file_object, true));
 			for (int i = 0; i < list2.size(); i++) {
-				String line = new String();
-				line = (i + 1) + "." + list.get(i);
-				bw.write(line + "\n");
+				String taskToBeAppended = new String();
+				taskToBeAppended = (i + 1) + "." + list.get(i);
+				bw.write(taskToBeAppended + "\n");
 			}
 
 		} catch (IOException ee) {
