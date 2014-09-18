@@ -10,7 +10,7 @@ import java.util.*;
 //import org.junit.Test;
 
 public class textBuddy {
-	private static ArrayList<String> list = new ArrayList<String>();
+	private static List<String> list = new ArrayList<String>();
 	private static Scanner sc;
 	private static BufferedWriter bw;
 	private static String fileName;
@@ -38,8 +38,8 @@ public class textBuddy {
 		String result=null;
 		switch (command) {
 		case "add":
-			result = addToFile();
-			return result;
+			result = addToFile(sc.nextLine());
+			return "add command executed";
 		case "delete":
 			deleteFileContent();
 			break;
@@ -48,6 +48,9 @@ public class textBuddy {
 			return result;
 		case "clear":
 			clearFileContent();
+			break;
+		case"sort":
+			result = sortFile();
 			break;
 		case "exit":
 			break;
@@ -60,7 +63,23 @@ public class textBuddy {
 
 	}
 
-	private static void clearFileContent() throws IOException {
+	public static String sortFile() throws IOException {
+		String result = null;
+		Collections.sort(list, new Comparator<String>(){
+			public int compare(String string1, String string2){
+				return string1.compareTo(string2);
+			}
+		});
+		
+		result = clearFile(fileName);
+		
+		appendFile(list);
+		
+		System.out.println(fileName +" is sorted alphabetically!");
+		return result;
+	}
+
+	public static void clearFileContent() throws IOException {
 		// TODO Auto-generated method stub
 		list.removeAll(list);
 		clearFile(fileName);
@@ -80,7 +99,7 @@ public class textBuddy {
 		return result;
 	}
 
-	private static void printFile(String filename2) throws IOException {
+	public static void printFile(String filename2) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader br = null;
 		try {
@@ -113,13 +132,11 @@ public class textBuddy {
 
 	//This method will append and display the user input to the file
 	//Pre-condition: will only accept String input
-	public static String addToFile() throws IOException {
+	public static String addToFile(String toBeAdded) throws IOException {
 		// TODO Auto-generated method stub
-		String data = new String();
-		data = sc.nextLine();
-		list.add(data);
+		list.add(toBeAdded);
 		String result = "added to " + fileName + ": \""
-				+ data.substring(1, data.length()) + "\"";
+				+ toBeAdded.substring(1, toBeAdded.length()) + "\"";
 		System.out.println(result);
 		// first we clear the content of the file
 		clearFile(fileName);
@@ -129,7 +146,7 @@ public class textBuddy {
 	}
 	
 	//This method will append the user input to the file
-	public static void appendFile(ArrayList<String> list2)
+	public static void appendFile(List<String> list2)
 			throws IOException {
 		// TODO Auto-generated method stub
 		try {
