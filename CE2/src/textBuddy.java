@@ -65,33 +65,26 @@ public class textBuddy {
 	}
 
 	public static String searchFile(String keyword) {
-		String result = null;
-		int index;
-		int i=1;
-		keyword.trim();
-		//System.out.println(keyword);
-		//String listString = list.toString();
-		//System.out.println(listString);
-		if (list.contains(keyword)) {
-			System.out.println("Results found: ");
-			List<String> subList = new ArrayList<String>();
-			subList = list;
-			while(subList.size()>0){
-				index = list.indexOf(keyword);
-				System.out.println(index);
-				String matchingString = list.get(index);
-				System.out.println(i + ". " + matchingString);
-				i++;
-				if(subList.size()<=1)
-					break;
-				subList = subList.subList(index, subList.size()-1);
-			}
-			result = "found!";
-			return result;
-		} else {
-			System.out.println("Sorry, there is no matching result.");
+		
+		if(fileName.isEmpty()){
+			System.out.println("File is empty!");
+			return "File is empty";
 		}
-		return null;
+
+		boolean found = false;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).contains(keyword)) {
+				System.out.println("Results found: ");
+				System.out.println(i+1 + ". "+ list.get(i));
+				found = true;
+			}
+		}
+		if (found == false) {
+			System.out.println("Not found!");
+			return "Not Found";
+		}
+		return "Found";
+
 	}
 
 	public static String sortFile() throws IOException {
