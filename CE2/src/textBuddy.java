@@ -32,15 +32,16 @@ public class textBuddy {
 		}
 	}
 
-	public static String processCommand(String command) throws IOException {
+	public static String processCommand(String input) throws IOException {
 		// TODO Auto-generated method stub
 		String result = null;
-		switch (command) {
+		String inputArr[] = input.split(" ",2);
+		switch (inputArr[0]) {
 		case "add":
-			result = addToFile(sc.nextLine());
+			result = addToFile(inputArr[1]);
 			return "add command executed";
 		case "delete":
-			deleteFileContent();
+			deleteFileContent(inputArr[1]);
 			break;
 		case "display":
 			result = displayFileContent();
@@ -52,7 +53,7 @@ public class textBuddy {
 			result = sortFile();
 			break;
 		case "search":
-			result = searchFile(sc.nextLine());
+			result = searchFile(inputArr[1]);
 		case "exit":
 			break;
 		default:
@@ -137,7 +138,7 @@ public class textBuddy {
 		}
 	}
 
-	private static void deleteFileContent() throws IOException {
+	public static void deleteFileContent(String tobeDeleted) throws IOException {
 		// TODO Auto-generated method stub
 		if (!list.isEmpty()) {
 			String toBeDeleted = sc.next();
@@ -160,7 +161,7 @@ public class textBuddy {
 		// TODO Auto-generated method stub
 		list.add(toBeAdded);
 		String result = "added to " + fileName + ": \""
-				+ toBeAdded.substring(1, toBeAdded.length()) + "\"";
+				+ toBeAdded + "\"";
 		System.out.println(result);
 		// first we clear the content of the file
 		clearFile(fileName);
@@ -213,7 +214,7 @@ public class textBuddy {
 	private static String askForCommand() {
 		System.out.print("Command: ");
 		sc = new Scanner(System.in);
-		return sc.next();
+		return sc.nextLine();
 	}
 
 	// This method shows the welcome message to the users, indicating the file
