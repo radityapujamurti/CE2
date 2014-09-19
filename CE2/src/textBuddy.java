@@ -19,8 +19,7 @@ public class textBuddy {
 	public static void main(String args[]) throws IOException {
 		String command = new String("thisIsAStub");
 		fileName = args[0];
-		file_object = new File(fileName);
-		file_object.createNewFile();
+		initialize(fileName);
 		if (file_object.exists()) {
 			displayIntro(fileName);
 			while (!command.equals("exit")) {
@@ -32,14 +31,24 @@ public class textBuddy {
 		}
 	}
 
+	public static String initialize(String fileName) throws IOException {
+		String result = null;
+		file_object = new File(fileName);
+		file_object.createNewFile();
+		if (file_object.exists()) {
+			result = "file created!";
+		}
+		return result;
+	}
+
 	public static String processCommand(String input) throws IOException {
 		// TODO Auto-generated method stub
 		String result = null;
-		String inputArr[] = input.split(" ",2);
+		String inputArr[] = input.split(" ", 2);
 		switch (inputArr[0]) {
 		case "add":
 			result = addToFile(inputArr[1]);
-			return "add command executed";
+			return result;
 		case "delete":
 			deleteFileContent(inputArr[1]);
 			break;
@@ -66,8 +75,8 @@ public class textBuddy {
 	}
 
 	public static String searchFile(String keyword) {
-		
-		if(fileName.isEmpty()){
+
+		if (fileName.isEmpty()) {
 			System.out.println("File is empty!");
 			return "File is empty";
 		}
@@ -75,8 +84,9 @@ public class textBuddy {
 		boolean found = false;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).contains(keyword)) {
-				System.out.println("Results found: ");
-				System.out.println(i+1 + ". "+ list.get(i));
+				if (found == false)
+					System.out.println("Result found: ");
+				System.out.println(i + 1 + ". " + list.get(i));
 				found = true;
 			}
 		}
@@ -160,8 +170,7 @@ public class textBuddy {
 	public static String addToFile(String toBeAdded) throws IOException {
 		// TODO Auto-generated method stub
 		list.add(toBeAdded);
-		String result = "added to " + fileName + ": \""
-				+ toBeAdded + "\"";
+		String result = "added to " + fileName + ": \"" + toBeAdded + "\"";
 		System.out.println(result);
 		// first we clear the content of the file
 		clearFile(fileName);
