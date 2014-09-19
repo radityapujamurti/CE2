@@ -27,15 +27,14 @@ public class textBuddy {
 				command = askForCommand();
 				processCommand(command);
 			}
-		}
-		else{
+		} else {
 			System.out.println("Sorry, unable to create the file");
 		}
 	}
 
 	public static String processCommand(String command) throws IOException {
 		// TODO Auto-generated method stub
-		String result=null;
+		String result = null;
 		switch (command) {
 		case "add":
 			result = addToFile(sc.nextLine());
@@ -49,9 +48,11 @@ public class textBuddy {
 		case "clear":
 			clearFileContent();
 			break;
-		case"sort":
+		case "sort":
 			result = sortFile();
 			break;
+		case "search":
+			result = searchFile(sc.nextLine());
 		case "exit":
 			break;
 		default:
@@ -63,19 +64,49 @@ public class textBuddy {
 
 	}
 
+	public static String searchFile(String keyword) {
+		String result = null;
+		int index;
+		int i=1;
+		keyword.trim();
+		//System.out.println(keyword);
+		//String listString = list.toString();
+		//System.out.println(listString);
+		if (list.contains(keyword)) {
+			System.out.println("Results found: ");
+			List<String> subList = new ArrayList<String>();
+			subList = list;
+			while(subList.size()>0){
+				index = list.indexOf(keyword);
+				System.out.println(index);
+				String matchingString = list.get(index);
+				System.out.println(i + ". " + matchingString);
+				i++;
+				if(subList.size()<=1)
+					break;
+				subList = subList.subList(index, subList.size()-1);
+			}
+			result = "found!";
+			return result;
+		} else {
+			System.out.println("Sorry, there is no matching result.");
+		}
+		return null;
+	}
+
 	public static String sortFile() throws IOException {
 		String result = null;
-		Collections.sort(list, new Comparator<String>(){
-			public int compare(String string1, String string2){
+		Collections.sort(list, new Comparator<String>() {
+			public int compare(String string1, String string2) {
 				return string1.compareTo(string2);
 			}
 		});
-		
+
 		result = clearFile(fileName);
-		
+
 		appendFile(list);
-		
-		System.out.println(fileName +" is sorted alphabetically!");
+
+		System.out.println(fileName + " is sorted alphabetically!");
 		return result;
 	}
 
@@ -90,7 +121,7 @@ public class textBuddy {
 		// TODO Auto-generated method stub
 		String result;
 		if (list.isEmpty()) {
-			result= fileName + " is empty";
+			result = fileName + " is empty";
 			System.out.println(result);
 		} else {
 			printFile(fileName);
@@ -130,8 +161,8 @@ public class textBuddy {
 
 	}
 
-	//This method will append and display the user input to the file
-	//Pre-condition: will only accept String input
+	// This method will append and display the user input to the file
+	// Pre-condition: will only accept String input
 	public static String addToFile(String toBeAdded) throws IOException {
 		// TODO Auto-generated method stub
 		list.add(toBeAdded);
@@ -144,10 +175,9 @@ public class textBuddy {
 		appendFile(list);
 		return result;
 	}
-	
-	//This method will append the user input to the file
-	public static void appendFile(List<String> list2)
-			throws IOException {
+
+	// This method will append the user input to the file
+	public static void appendFile(List<String> list2) throws IOException {
 		// TODO Auto-generated method stub
 		try {
 			bw = new BufferedWriter(new FileWriter(file_object, true));
@@ -156,17 +186,17 @@ public class textBuddy {
 				taskToBeAppended = (i + 1) + "." + list.get(i);
 				bw.write(taskToBeAppended + "\n");
 			}
-			
+
 		} catch (IOException ee) {
 			ee.printStackTrace();
 		} finally {
-			//close the writer so that it can write to the file
-            bw.close(); 
-        }
+			// close the writer so that it can write to the file
+			bw.close();
+		}
 
 	}
 
-	//This method will delete all content(s) of the file
+	// This method will delete all content(s) of the file
 	public static String clearFile(String filename2) throws IOException {
 		// TODO Auto-generated method stub
 		String result = null;
@@ -176,8 +206,8 @@ public class textBuddy {
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("");
 			bw.close();
-			result = fileName+" is cleared!";
-			
+			result = fileName + " is cleared!";
+
 		} catch (IOException ee) {
 			ee.printStackTrace();
 		}
@@ -185,22 +215,20 @@ public class textBuddy {
 
 	}
 
-	//This method prompts the user for an input
-	//Pre-condition: only accepts String input
+	// This method prompts the user for an input
+	// Pre-condition: only accepts String input
 	private static String askForCommand() {
 		System.out.print("Command: ");
 		sc = new Scanner(System.in);
 		return sc.next();
 	}
 
-	//This method shows the welcome message to the users, indicating the file is ready to use
+	// This method shows the welcome message to the users, indicating the file
+	// is ready to use
 	private static void displayIntro(String fileName) {
 		// TODO Auto-generated method stub
 		System.out.println("Welcome to TextBuddy. " + fileName
 				+ " is ready for use");
 	}
-	
-	
-	
 
 }
