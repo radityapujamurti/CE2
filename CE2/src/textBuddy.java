@@ -41,7 +41,7 @@ public class textBuddy {
 		file_object = new File(fileName);
 		file_object.createNewFile();
 		if (file_object.exists()) {
-			result = "file created!";
+			result = fileName + " created!";
 		}
 		return result;
 	}
