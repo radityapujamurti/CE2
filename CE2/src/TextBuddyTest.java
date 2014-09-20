@@ -9,7 +9,7 @@ public class TextBuddyTest {
 	
 	public void testProcessCommand() throws IOException{
 		
-		testInitialize("initialize the file","CE2 created!","CE2.txt");
+		testInitialize("initialize the file","CE2.txt created!","CE2.txt");
 		//testOneCommand("simple display before any add","CE2.txt is empty","display CE2.txt");
 		//testOneCommand("simple add to file","added to CE2.txt: test 1","add test1");
 		
