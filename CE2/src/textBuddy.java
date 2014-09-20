@@ -6,48 +6,46 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-
 public class textBuddy {
 	private static List<String> list = new ArrayList<String>();
 	private static Scanner sc;
 	private static BufferedWriter bw;
-	private static String fileName;
+	public static String fileName;
 	static File file_object = null;
-	
-	private static String ERROR_CREATING_FILE_MSG = "Sorry, unable to create the file";
-	private static String INVALID_COMMAND_WARNING = "Invalid Command!";
-	private static String EMPTY_FILE_WARNING = fileName + " is empty!";
-	private static String WELCOME_MESSAGE = "Welcome to TextBuddy. " + fileName
-			+ " is ready for use";
-	
+
+	// format for String output
+	public static final String ADD_NOTICE_FORMAT = "added to %s: \"%s\"";
+	public static final String DELETE_NOTICE_FORMAT = "deleted from %s: \"%s\"";
+	public static final String CLEAR_NOTICE_FORMAT = "all content deleted from %s";
+	public static final String SEARCH_NOTICE_FORMAT = "results found: ";
+	public static final String SORT_NOTICE_FORMAT = "the content of %s is sorted alphabetically.";
+	public static final String REQUEST_COMMAND = "Command: ";
+	public static final String ERROR_CREATING_FILE_MSG = "Sorry, unable to create %s";
+	public static final String INVALID_COMMAND_WARNING = "Invalid Command!";
+	public static final String EMPTY_FILE_WARNING = "%s is empty!";
+	public static final String WELCOME_MESSAGE = "Welcome to TextBuddy. %s is ready for use";
+
 	public static void main(String args[]) throws IOException {
 		String command = new String("thisIsAStub");
 		fileName = args[0];
-		initialize(fileName);
+		// System.out.println(WELCOME_MESSAGE);
+		file_object = new File(fileName);
+		file_object.createNewFile();
 		if (file_object.exists()) {
-			displayIntro(fileName);
+			displayIntro();
 			while (!command.equals("exit")) {
 				command = askForCommand();
 				processCommand(command);
 			}
 		} else {
-			System.out.println(ERROR_CREATING_FILE_MSG);
+			System.out
+					.println(String.format(ERROR_CREATING_FILE_MSG, fileName));
 		}
 	}
 
-	//This method will create the file according to the specified file name
-	public static String initialize(String fileName) throws IOException {
-		String result = null;
-		file_object = new File(fileName);
-		file_object.createNewFile();
-		if (file_object.exists()) {
-			result = fileName + " created!";
-		}
-		return result;
-	}
-
+	// this method is the "center" of the application where the command is
+	// processed
 	public static String processCommand(String input) throws IOException {
-		// TODO Auto-generated method stub
 		String result = null;
 		String inputArr[] = input.split(" ", 2);
 		switch (inputArr[0]) {
@@ -58,7 +56,7 @@ public class textBuddy {
 			deleteFileContent(inputArr[1]);
 			break;
 		case "display":
-			result = displayFileContent(inputArr[1]);
+			result = displayFileContent();
 			return result;
 		case "clear":
 			clearFileContent();
@@ -79,19 +77,20 @@ public class textBuddy {
 
 	}
 
-	//This method will search all strings that contain they keywords
+	// This method will search all strings that contain they keywords and
+	// display them
 	public static String searchFile(String keywords) {
 
 		if (fileName.isEmpty()) {
-			System.out.println(EMPTY_FILE_WARNING);
-			return EMPTY_FILE_WARNING;
+			System.out.println(String.format(EMPTY_FILE_WARNING, fileName));
+			return null;
 		}
 
 		boolean found = false;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).contains(keywords)) {
 				if (found == false)
-					System.out.println("Result found: ");
+					System.out.println(SEARCH_NOTICE_FORMAT);
 				System.out.println(i + 1 + ". " + list.get(i));
 				found = true;
 			}
@@ -104,7 +103,14 @@ public class textBuddy {
 
 	}
 
+	// This method will sort the content of the file alphabetically
 	public static String sortFile() throws IOException {
+
+		if (fileName.isEmpty()) {
+			System.out.println(String.format(EMPTY_FILE_WARNING, fileName));
+			return null;
+		}
+
 		String result = null;
 		Collections.sort(list, new Comparator<String>() {
 			public int compare(String string1, String string2) {
@@ -116,32 +122,31 @@ public class textBuddy {
 
 		appendFile(list);
 
-		System.out.println(fileName + " is sorted alphabetically!");
+		System.out.println(String.format(SORT_NOTICE_FORMAT, fileName));
 		return result;
 	}
 
 	public static void clearFileContent() throws IOException {
-		// TODO Auto-generated method stub
 		list.removeAll(list);
 		clearFile(fileName);
-		System.out.println("all content deleted from " + fileName + "");
+		System.out.println(String.format(CLEAR_NOTICE_FORMAT, fileName));
 	}
 
-	public static String displayFileContent(String fileName) throws IOException {
-		// TODO Auto-generated method stub
-		String result;
+	public static String displayFileContent() throws IOException {
+		String result=null;
 		if (list.isEmpty()) {
-			result = fileName + " is empty";
-			System.out.println(result);
+			System.out.println(String.format(EMPTY_FILE_WARNING, fileName));
+			result = String.format(EMPTY_FILE_WARNING, fileName);
 		} else {
 			printFile(fileName);
-			result = fileName + " is not empty";
 		}
 		return result;
 	}
 
-	public static void printFile(String filename2) throws IOException {
-		// TODO Auto-generated method stub
+	/*This method will read the file line by line
+	 * and display the content
+	 */
+	public static void printFile(String filename) throws IOException {
 		BufferedReader br = null;
 		try {
 			String currLine;
@@ -153,30 +158,27 @@ public class textBuddy {
 			ee.printStackTrace();
 		}
 	}
-
-	public static void deleteFileContent(String tobeDeleted) throws IOException {
-		// TODO Auto-generated method stub
+	
+	/*This method accepts the position of the string to be deleted 
+	 * and display the result accordingly
+	 * Pre-condition: the position is integer*/
+	public static void deleteFileContent(String toBeDeleted) throws IOException {
 		if (!list.isEmpty()) {
-			String toBeDeleted = sc.next();
-			sc.nextLine();
 			int index = Integer.valueOf(toBeDeleted) - 1;
-			String removed = list.remove(index);
-			System.out.println("deleted from " + fileName + ": \""
-					+ removed.substring(1, removed.length()) + "\"");
+			String toBeDeletedString = list.remove(index);
+			System.out.println(String.format(DELETE_NOTICE_FORMAT, fileName,
+					toBeDeletedString));
 			clearFile(fileName);
 			appendFile(list);
 		} else {
-			System.out.println("The file is empty. Nothing to delete.");
+			System.out.println(String.format(EMPTY_FILE_WARNING, fileName));
 		}
-
 	}
 
-	// This method will append and display the user input to the file
-	// Pre-condition: will only accept String input
+	/*This method will append and display the user input to the file*/
 	public static String addToFile(String toBeAdded) throws IOException {
-		// TODO Auto-generated method stub
 		list.add(toBeAdded);
-		String result = "added to " + fileName + ": \"" + toBeAdded + "\"";
+		String result = String.format(ADD_NOTICE_FORMAT, fileName, toBeAdded);
 		System.out.println(result);
 		// first we clear the content of the file
 		clearFile(fileName);
@@ -185,12 +187,13 @@ public class textBuddy {
 		return result;
 	}
 
-	// This method will append the user input to the file
-	public static void appendFile(List<String> list2) throws IOException {
-		// TODO Auto-generated method stub
+	/*This method will append the user input to the file
+	 * with specified numbered format
+	 */
+	public static void appendFile(List<String> list) throws IOException {
 		try {
 			bw = new BufferedWriter(new FileWriter(file_object, true));
-			for (int i = 0; i < list2.size(); i++) {
+			for (int i = 0; i < list.size(); i++) {
 				String taskToBeAppended = new String();
 				taskToBeAppended = (i + 1) + "." + list.get(i);
 				bw.write(taskToBeAppended + "\n");
@@ -206,11 +209,10 @@ public class textBuddy {
 	}
 
 	// This method will delete all content(s) of the file
-	public static String clearFile(String filename2) throws IOException {
-		// TODO Auto-generated method stub
+	public static String clearFile(String filename) throws IOException {
 		String result = null;
 		try {
-			File file = new File(filename2);
+			File file = new File(filename);
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
 			bw.write("");
@@ -227,16 +229,15 @@ public class textBuddy {
 	// This method prompts the user for an input
 	// Pre-condition: only accepts String input
 	public static String askForCommand() {
-		System.out.print("Command: ");
+		System.out.print(REQUEST_COMMAND);
 		sc = new Scanner(System.in);
 		return sc.nextLine();
 	}
 
 	// This method shows the welcome message to the users, indicating the file
 	// is ready to use
-	private static void displayIntro(String fileName) {
-		// TODO Auto-generated method stub
-		System.out.println(WELCOME_MESSAGE);
+	public static void displayIntro() {
+		System.out.println(String.format(WELCOME_MESSAGE, fileName));
 	}
 
 }
