@@ -58,7 +58,7 @@ public class textBuddy {
 			deleteFileContent(inputArr[1]);
 			break;
 		case "display":
-			result = displayFileContent();
+			result = displayFileContent(inputArr[1]);
 			return result;
 		case "clear":
 			clearFileContent();
@@ -127,15 +127,15 @@ public class textBuddy {
 		System.out.println("all content deleted from " + fileName + "");
 	}
 
-	public static String displayFileContent() throws IOException {
+	public static String displayFileContent(String fileName) throws IOException {
 		// TODO Auto-generated method stub
 		String result;
 		if (list.isEmpty()) {
-			result = EMPTY_FILE_WARNING;
+			result = fileName + " is empty";
 			System.out.println(result);
 		} else {
 			printFile(fileName);
-			result = fileName + "is not empty";
+			result = fileName + " is not empty";
 		}
 		return result;
 	}
