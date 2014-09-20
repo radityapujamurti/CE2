@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 
-//import org.junit.Test;
 
 public class textBuddy {
 	private static List<String> list = new ArrayList<String>();
@@ -15,7 +13,13 @@ public class textBuddy {
 	private static BufferedWriter bw;
 	private static String fileName;
 	static File file_object = null;
-
+	
+	private static String ERROR_CREATING_FILE_MSG = "Sorry, unable to create the file";
+	private static String INVALID_COMMAND_WARNING = "Invalid Command!";
+	private static String EMPTY_FILE_WARNING = fileName + " is empty!";
+	private static String WELCOME_MESSAGE = "Welcome to TextBuddy. " + fileName
+			+ " is ready for use";
+	
 	public static void main(String args[]) throws IOException {
 		String command = new String("thisIsAStub");
 		fileName = args[0];
@@ -27,10 +31,11 @@ public class textBuddy {
 				processCommand(command);
 			}
 		} else {
-			System.out.println("Sorry, unable to create the file");
+			System.out.println(ERROR_CREATING_FILE_MSG);
 		}
 	}
 
+	//This method will create the file according to the specified file name
 	public static String initialize(String fileName) throws IOException {
 		String result = null;
 		file_object = new File(fileName);
@@ -66,7 +71,7 @@ public class textBuddy {
 		case "exit":
 			break;
 		default:
-			result = "Invalid Command!";
+			result = INVALID_COMMAND_WARNING;
 			System.out.println(result);
 			return result;
 		}
@@ -74,16 +79,17 @@ public class textBuddy {
 
 	}
 
-	public static String searchFile(String keyword) {
+	//This method will search all strings that contain they keywords
+	public static String searchFile(String keywords) {
 
 		if (fileName.isEmpty()) {
-			System.out.println("File is empty!");
-			return "File is empty";
+			System.out.println(EMPTY_FILE_WARNING);
+			return EMPTY_FILE_WARNING;
 		}
 
 		boolean found = false;
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).contains(keyword)) {
+			if (list.get(i).contains(keywords)) {
 				if (found == false)
 					System.out.println("Result found: ");
 				System.out.println(i + 1 + ". " + list.get(i));
@@ -125,7 +131,7 @@ public class textBuddy {
 		// TODO Auto-generated method stub
 		String result;
 		if (list.isEmpty()) {
-			result = fileName + " is empty";
+			result = EMPTY_FILE_WARNING;
 			System.out.println(result);
 		} else {
 			printFile(fileName);
@@ -220,7 +226,7 @@ public class textBuddy {
 
 	// This method prompts the user for an input
 	// Pre-condition: only accepts String input
-	private static String askForCommand() {
+	public static String askForCommand() {
 		System.out.print("Command: ");
 		sc = new Scanner(System.in);
 		return sc.nextLine();
@@ -230,8 +236,7 @@ public class textBuddy {
 	// is ready to use
 	private static void displayIntro(String fileName) {
 		// TODO Auto-generated method stub
-		System.out.println("Welcome to TextBuddy. " + fileName
-				+ " is ready for use");
+		System.out.println(WELCOME_MESSAGE);
 	}
 
 }
